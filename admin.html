@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin Dashboard | AttendifyHR</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="page-loader" id="page-loader">
+  <div class="loader-ring"></div>
+  <div class="loader-text">Loading dashboard…</div>
+</div>
+
+<div class="app-shell hidden" id="app-shell">
+
+  <div class="sidebar-scrim" id="sidebar-scrim"></div>
+
+  <!-- ============================= SIDEBAR ============================= -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">AM</div>
+      <div>
+        <div class="brand-title">AttendifyHR</div>
+        <div class="brand-sub">Admin console</div>
+      </div>
+    </div>
+
+    <button class="nav-link active" data-section="overview"><span class="dot"></span> Overview</button>
+    <button class="nav-link" data-section="employees"><span class="dot"></span> Employees</button>
+    <button class="nav-link" data-section="attendance"><span class="dot"></span> Attendance</button>
+
+    <div class="sidebar-footer">
+      <button class="nav-link" id="logout-btn"><span class="dot"></span> Sign out</button>
+    </div>
+  </aside>
+
+  <!-- ============================== TOPBAR ============================== -->
+  <header class="topbar">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <button class="menu-btn" id="menu-btn" aria-label="Open menu">☰</button>
+      <div class="topbar-title" id="section-title">Overview</div>
+    </div>
+    <div class="topbar-right">
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+        <span class="knob">☀️</span>
+      </button>
+      <div class="avatar-chip">
+        <div class="avatar-circle" id="admin-initials">A</div>
+        <div>
+          <div style="font-size:13px; font-weight:700;" id="admin-name">Admin</div>
+          <div class="cell-muted" style="font-size:11px;">Administrator</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- =============================== MAIN =============================== -->
+  <main class="content">
+
+    <!-- ---------- OVERVIEW ---------- -->
+    <section id="section-overview">
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total employees</div>
+          <div class="stat-value" id="stat-total">–</div>
+          <div class="stat-sub">Active accounts</div>
+        </div>
+        <div class="stat-card accent-present">
+          <div class="stat-label">Present today</div>
+          <div class="stat-value" id="stat-present">–</div>
+          <div class="stat-sub" id="stat-present-sub">Checked in today</div>
+        </div>
+        <div class="stat-card accent-late">
+          <div class="stat-label">Late arrivals</div>
+          <div class="stat-value" id="stat-late">–</div>
+          <div class="stat-sub">After 09:30 AM</div>
+        </div>
+        <div class="stat-card accent-absent">
+          <div class="stat-label">Absent today</div>
+          <div class="stat-value" id="stat-absent">–</div>
+          <div class="stat-sub">Not checked in</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <h3>Today's attendance</h3>
+          <span class="panel-sub" id="today-date-label"></span>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Employee</th>
+                <th>Department</th>
+                <th>Check in</th>
+                <th>Check out</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="overview-table-body">
+              <tr><td colspan="5"><div class="skeleton" style="height:18px;"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- EMPLOYEES ---------- -->
+    <section id="section-employees" class="hidden">
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h3>Employees</h3>
+            <span class="panel-sub" id="employee-count-label">Manage your team</span>
+          </div>
+          <div class="toolbar">
+            <div class="search-box">
+              <span class="icon">🔍</span>
+              <input type="text" id="employee-search" placeholder="Search name, email, ID…" />
+            </div>
+            <button class="btn btn-primary" id="add-employee-btn">+ Add employee</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Employee ID</th>
+                <th>Department</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="employees-table-body">
+              <tr><td colspan="6"><div class="skeleton" style="height:18px;"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- ATTENDANCE ---------- -->
+    <section id="section-attendance" class="hidden">
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h3>Attendance records</h3>
+            <span class="panel-sub">Filter by employee or date, then export</span>
+          </div>
+          <div class="toolbar">
+            <select id="attendance-employee-filter">
+              <option value="">All employees</option>
+            </select>
+            <input type="date" id="attendance-date-filter" />
+            <button class="btn btn-outline btn-sm" id="attendance-clear-filter">Clear</button>
+            <button class="btn btn-accent" id="download-csv-btn">⬇ Download CSV</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Employee</th>
+                <th>Date</th>
+                <th>Check in</th>
+                <th>Check out</th>
+                <th>Hours</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="attendance-table-body">
+              <tr><td colspan="6"><div class="skeleton" style="height:18px;"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ============================ EMPLOYEE MODAL ============================ -->
+<div class="modal-backdrop hidden" id="employee-modal-backdrop">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="employee-modal-title">Add employee</h3>
+      <button class="btn btn-ghost btn-icon" id="employee-modal-close">✕</button>
+    </div>
+    <form id="employee-form">
+      <div class="modal-body">
+        <input type="hidden" id="emp-uid" />
+        <div class="form-grid">
+          <div class="field full">
+            <label for="emp-name">Full name</label>
+            <input type="text" id="emp-name" required placeholder="Jane Doe" />
+          </div>
+          <div class="field full">
+            <label for="emp-email">Email</label>
+            <input type="email" id="emp-email" required placeholder="jane@company.com" />
+          </div>
+          <div class="field full" id="emp-password-field">
+            <label for="emp-password">Temporary password</label>
+            <input type="text" id="emp-password" placeholder="Min. 6 characters" />
+          </div>
+          <div class="field">
+            <label for="emp-id">Employee ID</label>
+            <input type="text" id="emp-id" placeholder="EMP-0123" />
+          </div>
+          <div class="field">
+            <label for="emp-department">Department</label>
+            <input type="text" id="emp-department" placeholder="Engineering" />
+          </div>
+          <div class="field">
+            <label for="emp-position">Position</label>
+            <input type="text" id="emp-position" placeholder="Software Engineer" />
+          </div>
+          <div class="field">
+            <label for="emp-phone">Phone</label>
+            <input type="tel" id="emp-phone" placeholder="+91 90000 00000" />
+          </div>
+          <div class="field">
+            <label for="emp-role">Role</label>
+            <select id="emp-role">
+              <option value="employee">Employee</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="emp-status">Status</label>
+            <select id="emp-status">
+              <option value="true">Active</option>
+              <option value="false">Inactive</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" id="employee-modal-cancel">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="employee-save-btn">Save employee</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ============================ CONFIRM DELETE ============================ -->
+<div class="modal-backdrop hidden" id="confirm-modal-backdrop">
+  <div class="modal" style="max-width:380px;">
+    <div class="modal-header">
+      <h3>Remove employee?</h3>
+      <button class="btn btn-ghost btn-icon" id="confirm-modal-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="cell-muted" id="confirm-modal-text">This will permanently remove the employee's profile. Their attendance history is kept for records.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="confirm-cancel-btn">Cancel</button>
+      <button class="btn btn-danger" id="confirm-delete-btn">Yes, remove</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="firebase-config.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
