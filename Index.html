@@ -1,1 +1,233 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attendance System</title>
+
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+margin:0;
+padding:20px;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+background:white;
+padding:20px;
+border-radius:12px;
+box-shadow:0 0 15px rgba(0,0,0,.1);
+}
+
+h1{
+text-align:center;
+color:#1565c0;
+}
+
+input{
+width:100%;
+padding:12px;
+margin:10px 0;
+border-radius:8px;
+border:1px solid #ccc;
+font-size:16px;
+}
+
+.buttons{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+button{
+padding:12px 18px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-size:16px;
+color:white;
+}
+
+.present{
+background:#28a745;
+}
+
+.absent{
+background:#dc3545;
+}
+
+.download{
+background:#1565c0;
+margin-top:15px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+table th,table td{
+padding:10px;
+border:1px solid #ddd;
+text-align:center;
+}
+
+th{
+background:#1565c0;
+color:white;
+}
+
+.presentText{
+color:green;
+font-weight:bold;
+}
+
+.absentText{
+color:red;
+font-weight:bold;
+}
+
+footer{
+margin-top:20px;
+text-align:center;
+color:#666;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Attendance Management System</h1>
+
+<input type="text" id="name" placeholder="Enter Name">
+
+<input type="text" id="search" placeholder="Search Attendance..." onkeyup="loadTable()">
+
+<div class="buttons">
+<button class="present" onclick="markAttendance('Present')">Present</button>
+<button class="absent" onclick="markAttendance('Absent')">Absent</button>
+</div>
+
+<button class="download" onclick="downloadCSV()">Download CSV</button>
+
+<table>
+
+<thead>
+
+<tr>
+<th>Name</th>
+<th>Status</th>
+<th>Date</th>
+<th>Time</th>
+</tr>
+
+</thead>
+
+<tbody id="attendanceTable"></tbody>
+
+</table>
+
+<footer>
+Attendance Website | Made with HTML
+</footer>
+
+</div>
+
+<script>
+
+let attendance=JSON.parse(localStorage.getItem("attendance"))||[];
+
+function markAttendance(status){
+
+let name=document.getElementById("name").value.trim();
+
+if(name==""){
+alert("Enter Name");
+return;
+}
+
+let now=new Date();
+
+attendance.push({
+
+name:name,
+
+status:status,
+
+date:now.toLocaleDateString(),
+
+time:now.toLocaleTimeString()
+
+});
+
+localStorage.setItem("attendance",JSON.stringify(attendance));
+
+document.getElementById("name").value="";
+
+loadTable();
+
+}
+
+function loadTable(){
+
+let table=document.getElementById("attendanceTable");
+
+let search=document.getElementById("search").value.toLowerCase();
+
+table.innerHTML="";
+
+attendance
+.filter(a=>a.name.toLowerCase().includes(search))
+.forEach(a=>{
+
+table.innerHTML+=`
+<tr>
+<td>${a.name}</td>
+<td class="${a.status=="Present"?"presentText":"absentText"}">${a.status}</td>
+<td>${a.date}</td>
+<td>${a.time}</td>
+</tr>
+`;
+
+});
+
+}
+
+function downloadCSV(){
+
+let csv="Name,Status,Date,Time\n";
+
+attendance.forEach(a=>{
+
+csv+=`${a.name},${a.status},${a.date},${a.time}\n`;
+
+});
+
+let blob=new Blob([csv],{type:"text/csv"});
+
+let url=window.URL.createObjectURL(blob);
+
+let link=document.createElement("a");
+
+link.href=url;
+
+link.download="attendance.csv";
+
+link.click();
+
+}
+
+loadTable();
+
+</script>
+
+</body>
+</html>
