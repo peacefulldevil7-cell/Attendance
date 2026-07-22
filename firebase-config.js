@@ -15,12 +15,12 @@
 
 // TODO: replace with your own Firebase project credentials
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyCtYarQ1iHFVMTzYsQrb--Ijw5eLqU_0GY",
+  authDomain: "attendance-d43f6.firebaseapp.com",
+  projectId: "attendance-d43f6",
+  storageBucket: "attendance-d43f6.firebasestorage.app",
+  messagingSenderId: "118948243031",
+  appId: "1:118948243031:web:162dc9b754946a91d82512"
 };
 
 // Initialize the primary Firebase app (used for the signed-in session)
